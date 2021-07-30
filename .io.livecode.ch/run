@@ -1,0 +1,56 @@
+#!/bin/bash
+set -e
+
+
+cat $2 $1 >hout.scm
+IFS=' '
+read -ra headline <hout.scm
+tail -n +2 hout.scm >out.scm
+tail -n +2 $2 >lib.scm
+
+echo "(load-option 'format)" >format.scm
+
+case "${headline[0]}" in
+    black)
+        cd black
+        case "${headline[1]}" in
+            full)
+                mechanics-shell --load ../format.scm --load init.scm <../out.scm >out.txt
+                ;;
+            *)
+                mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
+                n=`wc -l <lib.txt | xargs`
+                n=$(expr $n - 2)
+                mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
+                ;;
+        esac
+        perl -pi -e 's/(\d-\d+:)/\n$1/g' out.txt
+        cat out.txt
+        ;;
+    blond)
+        cd blond
+        mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../out.scm >full.txt
+        perl -pi -e 's/(\d-\d+[>:])/\n$1/g' full.txt
+        case "${headline[1]}" in
+            full)
+                cp full.txt out.txt
+                ;;
+            *)
+                mechanics-shell --load ../format.scm --load mit.scm --load blond.scm --load boot.scm <../lib.scm >lib.txt
+                perl -pi -e 's/(\d-\d+[>:])/\n$1/g' lib.txt
+                n=`wc -l <lib.txt | xargs`
+                n=$(expr $n - 2)
+                cat full.txt | tail -n "+$n" | head -n-2 >out.txt
+                ;;
+        esac
+        cat out.txt
+        ;;
+    brown)
+        cd brown
+        cat lib.brn ../out.scm >out.brn
+        scheme brown.scm boot.scm <out.brn | tail -n +13
+        ;;
+    *)
+        echo "error: unknown headline $headline"
+        ;;
+esac
