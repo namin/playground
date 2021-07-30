@@ -20,9 +20,9 @@ case "${headline[0]}" in
             *)
                 if [ -s lib.scm ]
                 then
-                    mechanics-shell --load ../format.scm --load init-no-boot.scm <../lib.scm >lib.txt
-                else
                     mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
+                else
+                    mechanics-shell --load ../format.scm --load init-no-boot.scm <../lib.scm >lib.txt
                 fi
                 n=`wc -l <lib.txt | xargs`
                 n=$(expr $n - 2)
