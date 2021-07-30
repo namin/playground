@@ -18,8 +18,6 @@ case "${headline[0]}" in
                 mechanics-shell --load ../format.scm --load init.scm <../out.scm >out.txt
                 ;;
             *)
-                echo "lib.scm is"
-                cat lib.scm
                 if [ -s lib.scm ]
                 then
                     echo "here"
