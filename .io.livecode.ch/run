@@ -18,10 +18,14 @@ case "${headline[0]}" in
                 mechanics-shell --load ../format.scm --load init.scm <../out.scm >out.txt
                 ;;
             *)
+                echo "lib.scm is"
+                cat lib.scm
                 if [ -s lib.scm ]
                 then
+                    echo "here"
                     mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
                 else
+                    echo "there"
                     mechanics-shell --load ../format.scm --load init-no-boot.scm <../lib.scm >lib.txt
                 fi
                 n=`wc -l <lib.txt | xargs`
