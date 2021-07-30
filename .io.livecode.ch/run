@@ -18,7 +18,12 @@ case "${headline[0]}" in
                 mechanics-shell --load ../format.scm --load init.scm <../out.scm >out.txt
                 ;;
             *)
-                mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
+                if [ -s $2 ]
+                then
+                    mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
+                else
+                    mechanics-shell --load ../format.scm --load init-no-boot.scm <../lib.scm >lib.txt
+                fi
                 n=`wc -l <lib.txt | xargs`
                 n=$(expr $n - 2)
                 mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
