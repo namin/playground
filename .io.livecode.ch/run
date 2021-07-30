@@ -20,15 +20,24 @@ case "${headline[0]}" in
             *)
                 if [ -s lib.scm ]
                 then
-                    echo "here"
                     mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
                 else
-                    echo "there"
+                    echo "HERE"
                     mechanics-shell --load ../format.scm --load init-no-boot.scm <../lib.scm >lib.txt
+                    echo "---- LIB ----"
+                    cat lib.txt
+                    echo "---- END LIB ----"
                 fi
                 n=`wc -l <lib.txt | xargs`
                 n=$(expr $n - 2)
-                mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
+                mechanics-shell --load ../format.scm --load init.scm <../out.scm >tmp.txt
+                echo "---- TMP ----"
+                cat tmp.txt
+                echo "---- TMP LIB ----"
+                cat tmp.txt | tail -n "+$n" | head -n-2 >out.txt
+                echo "---- OUT ----"
+                cat out.txt
+                echo "---- OUT LIB ----"
                 ;;
         esac
         perl -pi -e 's/(\d-\d+:)/\n$1/g' out.txt
