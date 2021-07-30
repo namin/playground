@@ -21,9 +21,8 @@ case "${headline[0]}" in
                 mechanics-shell --load ../format.scm --load init.scm <../lib.scm >lib.txt
                 n=`wc -l <lib.txt | xargs`
                 n=$(expr $n - 2)
-                if [ -s lib.scm ]
+                if ! [ -s lib.scm ]
                 then
-                else
                     n=$(expr $n - 2)
                 fi
                 mechanics-shell --load ../format.scm --load init.scm <../out.scm | tail -n "+$n" | head -n-2 >out.txt
